@@ -1,4 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
+import Courses from "../components/Courses";
+import PremiumCourses from "../components/PremiumCourses";
+import Pricing from "../components/Pricing";
 import Main from "../layout/Main";
 import Login from "../Pages/Authentication/Login";
 import SignUp from "../Pages/Authentication/SignUp";
@@ -20,5 +23,19 @@ export const routes = createBrowserRouter([{
             path: '/signup',
             element: <SignUp></SignUp>
         },
+        {
+            path: '/pricing',
+            element: <Pricing></Pricing>
+        },
+        {
+            path: '/paid-course',
+            element: <PremiumCourses></PremiumCourses>,
+            loader: () => fetch('http://localhost:5000/paid-course')
+        },
+        {
+            path: '/course',
+            element: <Courses></Courses>,
+            loader: () => fetch('http://localhost:5000/free')
+        }
     ]
 }])

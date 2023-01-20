@@ -1,14 +1,17 @@
 import React from 'react';
-import Courses from '../../components/Courses';
+import Application from '../../components/Application';
+import Content from '../../components/Content';
 import Hero from '../../components/Hero';
-import PremiumCourses from '../../components/PremiumCourses';
+import JoinTeam from '../../components/JoinTeam';
+
 
 const Home = () => {
     return (
         <div>
             <Hero></Hero>
-            <Courses></Courses>
-            <PremiumCourses></PremiumCourses>
+            <Content></Content>
+            <JoinTeam></JoinTeam>
+            <Application></Application>
         </div>
     );
 };

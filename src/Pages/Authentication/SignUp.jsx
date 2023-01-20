@@ -1,7 +1,77 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { FcGoogle } from "react-icons/fc";
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../contexts/AuthProvider/AuthProvider';
 
 const SignUp = () => {
+
+    const [error, setError] = useState(null);
+
+    const navigate = useNavigate();
+
+    const { createUser, updateUserProfile, verifyEmail, signInWithGoogle } = useContext(AuthContext);
+
+    const handleSubmit = event => {
+        event.preventDefault();
+        const form = event.target;
+        const name = form.name.value;
+        const email = form.email.value;
+        // const photoURL = form.photoURL.value;
+        const password = form.password.value;
+        console.log(name, email, password);
+
+        // SignUp
+        createUser(email, password)
+            .then(result => {
+                const user = result.user;
+                console.log(user);
+                form.reset();
+                // handleUpdateUserProfile(name, photoURL);
+                // handleEmailVerification();
+
+                // verify email toaste
+                // toast.success('Please verify email before login')
+                navigate('/login');
+            })
+            .catch(error => {
+
+                if (error.code === "auth/email-already-in-use") {
+                    setError("The email address is already in use.");
+
+                } else if (error.code === "auth/invalid-email") {
+                    setError("The email address is not valid.");
+
+                } else if (error.code === "auth/operation-not-allowed") {
+                    setError("Operation not allowed.");
+                } else if (error.code === "auth/weak-password") {
+                    setError("The password is too weak. Password should be at least 6 characters.");
+                }
+                else {
+                    setError(error.message);
+                }
+                console.error('error', error);
+            })
+    }
+
+
+    const handleGoogleSignIn = () => {
+        signInWithGoogle()
+            .then(result => {
+                const user = result.user;
+                console.log(user);
+            })
+            .catch(error => {
+                if (error.code === "auth/popup-closed-by-user") {
+                    setError("PopUp closed by user.");
+                } 
+                else {
+                    setError(error.message);
+                }
+                console.error(error);
+            })
+    }
+
+
     return (
         <div className="relative">
             <img
@@ -53,7 +123,7 @@ const SignUp = () => {
                                 </h3>
 
 
-                                <form>
+                                <form onSubmit={handleSubmit}>
                                     <div className="mb-1 sm:mb-2">
                                         <label
                                             htmlFor="firstName"
@@ -70,6 +140,7 @@ const SignUp = () => {
                                             name="firstName"
                                         />
                                     </div>
+
                                     <div className="mb-1 sm:mb-2">
                                         <label
                                             htmlFor="lastName"
@@ -86,6 +157,7 @@ const SignUp = () => {
                                             name="lastName"
                                         />
                                     </div>
+
                                     <div className="mb-1 sm:mb-2">
                                         <label
                                             htmlFor="email"
@@ -102,6 +174,26 @@ const SignUp = () => {
                                             name="email"
                                         />
                                     </div>
+
+                                    <div className="mb-1 sm:mb-2">
+                                        <label
+                                            htmlFor="password"
+                                            className="inline-block mb-1 font-medium"
+                                        >
+                                            Password
+                                        </label>
+                                        <input
+                                            placeholder="Password"
+                                            required
+                                            type="password"
+                                            className="flex-grow w-full h-12 px-4 mb-2 transition duration-200 bg-white border border-gray-300 rounded shadow-sm appearance-none focus:border-deep-purple-accent-400 focus:outline-none focus:shadow-outline"
+                                            id="password"
+                                            name="password"
+                                        />
+                                    </div>
+
+                                    <span className='text-red-500'>{error}</span>
+
 
                                     <div className="mt-4 mb-2 sm:mb-4">
                                         <button
@@ -120,10 +212,11 @@ const SignUp = () => {
 
                                 <div className="mt-4 mb-2 sm:mb-4">
                                     <button
+                                        onClick={handleGoogleSignIn}
                                         type="button"
                                         className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-gray-900 transition duration-200 rounded shadow-md bg-gray-50 hover:bg-gray-200 focus:shadow-outline focus:outline-none"
                                     >
-                                     <FcGoogle className='text-xl mr-3'></FcGoogle> Sign in with Google
+                                        <FcGoogle className='text-xl mr-3'></FcGoogle> Sign in with Google
                                     </button>
                                 </div>
 
