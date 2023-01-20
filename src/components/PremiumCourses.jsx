@@ -51,10 +51,10 @@ const PremiumCourses = () => {
             <div className="grid max-w-md gap-10 lg:max-w-screen-lg lg:grid-cols-3 xl:max-w-screen-lg mx-auto">
 
                 {
-                    paidCourse.map((paid => {
+                    paidCourse.map((paid, index) => {
                         const { courseName, image, details, price } = paid;
                         return (
-                            <div className="flex flex-col transition duration-200 bg-white rounded shadow-sm shadow-gray-400
+                            <div key={index} className="flex flex-col transition duration-200 bg-white rounded shadow-sm shadow-gray-400
                             
                             hover:shadow-lg hover:shadow-gray-400 hover:cursor-pointer
                             ">
@@ -78,7 +78,7 @@ const PremiumCourses = () => {
                                         </div>
                                     </div>
                                     <a
-                                        href="/"
+                                        href="/login"
                                         className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
                                     >
                                         Buy Course
@@ -86,7 +86,7 @@ const PremiumCourses = () => {
                                 </div>
                             </div>
                         )
-                    }))
+                    })
                 }
 
 

@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthProvider/AuthProvider';
@@ -14,7 +15,9 @@ const SignUp = () => {
     const handleSubmit = event => {
         event.preventDefault();
         const form = event.target;
-        const name = form.name.value;
+        const firstName = form.firstName.value
+        const lastName = form.lastName.value;
+        const name = firstName + " " + lastName;
         const email = form.email.value;
         // const photoURL = form.photoURL.value;
         const password = form.password.value;
@@ -27,10 +30,10 @@ const SignUp = () => {
                 console.log(user);
                 form.reset();
                 // handleUpdateUserProfile(name, photoURL);
-                // handleEmailVerification();
+                handleEmailVerification();
 
                 // verify email toaste
-                // toast.success('Please verify email before login')
+                toast.success('Please verify email before login')
                 navigate('/login');
             })
             .catch(error => {
@@ -48,8 +51,8 @@ const SignUp = () => {
                 }
                 else {
                     setError(error.message);
+                    console.error('error', error);
                 }
-                console.error('error', error);
             })
     }
 
@@ -63,12 +66,29 @@ const SignUp = () => {
             .catch(error => {
                 if (error.code === "auth/popup-closed-by-user") {
                     setError("PopUp closed by user.");
-                } 
+                }
                 else {
                     setError(error.message);
                 }
                 console.error(error);
             })
+    }
+
+    /**  const handleUpdateUserProfile = (name, photoURL) => {
+        const profile = {
+            displayName: name,
+            photoURL: photoURL
+        }
+        updateUserProfile(profile)
+            .then(() => { })
+            .catch(error => console.error(error));
+    }
+    */
+
+    const handleEmailVerification = () => {
+        verifyEmail()
+            .then(() => { })
+            .catch(error => console.error(error));
     }
 
 

@@ -1,6 +1,68 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import { toast } from 'react-hot-toast';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../contexts/AuthProvider/AuthProvider';
 
 const Login = () => {
+
+    const [error, setError] = useState(null);
+
+    const { signIn, setLoading } = useContext(AuthContext);
+
+    const navigate = useNavigate();
+
+    const location = useLocation();
+    const from = location.state?.from?.pathname || '/'
+
+    const handleLogIn = (event) => {
+        event.preventDefault();
+        const form = event.target;
+        const email = form.email.value;
+        const password = form.password.value;
+        console.log(email, password);
+
+
+        signIn(email, password)
+            .then(result => {
+                const user = result.user;
+                console.log('signIn user', user);
+                // reset from after login
+                form.reset();
+
+                // user email verify na korle login korte dibo na
+                if (user.emailVerified) {
+                    navigate(from, { replace: true });
+                }
+                else {
+                    toast.error('Email not verified.')
+                }
+            })
+            .catch(error => {
+                if (error.code === "auth/user-not-found") {
+                    setError("Please check your email.");
+
+                } else if (error.code === "auth/wrong-password") {
+                    setError("Wrong Password.");
+
+                } else {
+                    setError(error.message);
+                    console.error(error);
+                }
+            })
+
+            // Email verified na hole PrivateRoute a gele loading... ta theke jay, seta remove korar jnno
+            .finally(() => {
+                setLoading(false);
+            })
+
+
+
+
+
+
+
+    }
+
     return (
         <div className="relative">
             <img
@@ -40,41 +102,9 @@ const Login = () => {
                         <div className="w-full max-w-xl xl:px-8 xl:w-5/12">
                             <div className="bg-white rounded shadow-2xl p-7 sm:p-10">
                                 <h3 className="mb-4 text-xl font-semibold sm:text-center sm:mb-6 sm:text-2xl">
-                                    Sign up for updates
+                                    Log in for continue
                                 </h3>
-                                <form>
-                                    <div className="mb-1 sm:mb-2">
-                                        <label
-                                            htmlFor="firstName"
-                                            className="inline-block mb-1 font-medium"
-                                        >
-                                            First name
-                                        </label>
-                                        <input
-                                            placeholder="John"
-                                            required
-                                            type="text"
-                                            className="flex-grow w-full h-12 px-4 mb-2 transition duration-200 bg-white border border-gray-300 rounded shadow-sm appearance-none focus:border-deep-purple-accent-400 focus:outline-none focus:shadow-outline"
-                                            id="firstName"
-                                            name="firstName"
-                                        />
-                                    </div>
-                                    <div className="mb-1 sm:mb-2">
-                                        <label
-                                            htmlFor="lastName"
-                                            className="inline-block mb-1 font-medium"
-                                        >
-                                            Last name
-                                        </label>
-                                        <input
-                                            placeholder="Doe"
-                                            required
-                                            type="text"
-                                            className="flex-grow w-full h-12 px-4 mb-2 transition duration-200 bg-white border border-gray-300 rounded shadow-sm appearance-none focus:border-deep-purple-accent-400 focus:outline-none focus:shadow-outline"
-                                            id="lastName"
-                                            name="lastName"
-                                        />
-                                    </div>
+                                <form onSubmit={handleLogIn}>
                                     <div className="mb-1 sm:mb-2">
                                         <label
                                             htmlFor="email"
@@ -91,16 +121,36 @@ const Login = () => {
                                             name="email"
                                         />
                                     </div>
+
+                                    <div className="mb-1 sm:mb-2">
+                                        <label
+                                            htmlFor="password"
+                                            className="inline-block mb-1 font-medium"
+                                        >
+                                            Password
+                                        </label>
+                                        <input
+                                            placeholder="Password"
+                                            required
+                                            type="password"
+                                            className="flex-grow w-full h-12 px-4 mb-2 transition duration-200 bg-white border border-gray-300 rounded shadow-sm appearance-none focus:border-deep-purple-accent-400 focus:outline-none focus:shadow-outline"
+                                            id="password"
+                                            name="password"
+                                        />
+                                    </div>
+
+                                    <span className='text-red-500'>{error}</span>
+
                                     <div className="mt-4 mb-2 sm:mb-4">
                                         <button
                                             type="submit"
                                             className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
                                         >
-                                            Subscribe
+                                            Log in
                                         </button>
                                     </div>
                                     <p className="text-xs text-gray-600 sm:text-sm">
-                                        We respect your privacy. Unsubscribe at any time.
+                                        We respect your privacy. Log out at any time.
                                     </p>
                                 </form>
                             </div>

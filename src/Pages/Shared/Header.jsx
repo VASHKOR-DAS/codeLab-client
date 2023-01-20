@@ -1,8 +1,18 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { AuthContext } from '../../contexts/AuthProvider/AuthProvider';
 
 const Header = () => {
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const { user, logOut } = useContext(AuthContext);
+
+    const handleLogOut = () => {
+        logOut()
+            .then(() => { })
+            .catch(error => console.error(error));
+    }
+
     return (
         <div>
             <div className="bg-deep-purple-accent-400">
@@ -81,16 +91,33 @@ const Header = () => {
                         </div>
 
                         <ul className="items-center hidden space-x-8 lg:flex">
-                            <li>
-                                <a
-                                    href="/login"
-                                    aria-label="Log in"
-                                    title="Log in"
-                                    className="font-medium tracking-wide text-gray-100 transition-colors duration-200 hover:text-teal-accent-400"
-                                >
-                                    Log in
-                                </a>
-                            </li>
+
+                            {
+                                (user?.email && user?.uid) ?
+                                    <li>
+                                        <a
+                                            onClick={handleLogOut}
+                                            href="/login"
+                                            aria-label="Log out"
+                                            title="Log out"
+                                            className="font-medium tracking-wide text-gray-100 transition-colors duration-200 hover:text-teal-accent-400"
+                                        >
+                                            Log out
+                                        </a>
+                                    </li>
+                                    :
+                                    <li>
+                                        <a
+                                            href="/login"
+                                            aria-label="Log in"
+                                            title="Log in"
+                                            className="font-medium tracking-wide text-gray-100 transition-colors duration-200 hover:text-teal-accent-400"
+                                        >
+                                            Log in
+                                        </a>
+                                    </li>
+                            }
+
                             <li>
                                 <a
                                     href="/signup"
