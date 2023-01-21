@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router-dom';
 
 const PremiumCourses = () => {
 
@@ -52,39 +52,41 @@ const PremiumCourses = () => {
 
                 {
                     paidCourse.map((paid, index) => {
-                        const { courseName, image, details, price } = paid;
+                        const {_id, courseName, image, details, price } = paid;
                         return (
-                            <div key={index} className="flex flex-col transition duration-200 bg-white rounded shadow-sm shadow-gray-400
+                            <Link to={`/course/${_id}`}>
+                                <div key={index} className="flex flex-col transition duration-200 bg-white rounded shadow-sm shadow-gray-400
                             
                             hover:shadow-lg hover:shadow-gray-400 hover:cursor-pointer
                             ">
 
-                                <div className="relative w-full h-48">
-                                    <img
-                                        src={image}
-                                        className="object-cover w-full h-full rounded-t"
-                                        alt="Plan"
-                                    />
-                                </div>
-
-                                <div className="flex flex-col justify-between flex-grow p-8 border border-t-0 rounded-b">
-                                    <div>
-                                        <div className="text-lg font-semibold">{courseName}</div>
-                                        <p className="text-sm text-gray-900">
-                                            {details.slice(0, 100) + '...'}
-                                        </p>
-                                        <div className="mt-1 mb-4 mr-1 text-4xl font-bold sm:text-5xl">
-                                            {price}
-                                        </div>
+                                    <div className="relative w-full h-48">
+                                        <img
+                                            src={image}
+                                            className="object-cover w-full h-full rounded-t"
+                                            alt="Plan"
+                                        />
                                     </div>
-                                    <a
-                                        href="/login"
-                                        className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-                                    >
-                                        Buy Course
-                                    </a>
+
+                                    <div className="flex flex-col justify-between flex-grow p-8 border border-t-0 rounded-b">
+                                        <div>
+                                            <div className="text-lg font-semibold">{courseName}</div>
+                                            <p className="text-sm text-gray-900">
+                                                {details.slice(0, 100) + '...'}
+                                            </p>
+                                            <div className="mt-1 mb-4 mr-1 text-4xl font-bold sm:text-5xl">
+                                                {price}
+                                            </div>
+                                        </div>
+                                        <a
+                                            href="/login"
+                                            className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
+                                        >
+                                            Buy Course
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
+                            </Link>
                         )
                     })
                 }

@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import CourseDetails from "../components/CourseDetails";
 import Courses from "../components/Courses";
 import PremiumCourses from "../components/PremiumCourses";
 import Pricing from "../components/Pricing";
@@ -31,12 +32,17 @@ export const routes = createBrowserRouter([{
         {
             path: '/paid-course',
             element: <PremiumCourses></PremiumCourses>,
-            loader: () => fetch('http://localhost:5000/paid-course')
+            loader: () => fetch('https://code-lab-server.vercel.app/paid-course')
         },
         {
             path: '/course',
             element: <Courses></Courses>,
-            loader: () => fetch('http://localhost:5000/free')
+            loader: () => fetch('https://code-lab-server.vercel.app/free')
+        },
+        {
+            path: '/course/:id',
+            element: <CourseDetails></CourseDetails>,
+            loader: ({ params }) => fetch(`https://code-lab-server.vercel.app/course/${params.id}`)
         }
     ]
 }])

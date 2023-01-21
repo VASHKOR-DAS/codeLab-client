@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router-dom';
 
 const Courses = () => {
 
@@ -44,34 +44,35 @@ const Courses = () => {
 
                     {
                         freeCourse.map((course, index) => {
-                            const { courseName, image, category, details } = course;
+                            const { _id, courseName, image, category, details } = course;
                             return (
 
-
-                                <div key={index} className='shadow-sm shadow-gray-400 bg-white rounded hover:shadow-lg hover:shadow-gray-400 hover:cursor-pointer transition duration-200'>
-                                    <img
-                                        className="object-cover w-full h-56 mb-6 rounded shadow-lg md:h-64 xl:h-80"
-                                        src={image}
-                                        alt=""
-                                    />
-                                    <div className='mx-5 pb-5'>
-                                        <div className='flex justify-between'>
-                                            <p className="mb-2 text-xl font-bold leading-none sm:text-2xl">
-                                                {courseName}
+                                <Link to={`/course/${_id}`}>
+                                    <div key={index} className='shadow-sm shadow-gray-400 bg-white rounded hover:shadow-lg hover:shadow-gray-400 hover:cursor-pointer transition duration-200'>
+                                        <img
+                                            className="object-cover w-full h-56 mb-6 rounded shadow-lg md:h-64 xl:h-80"
+                                            src={image}
+                                            alt=""
+                                        />
+                                        <div className='mx-5 pb-5'>
+                                            <div className='flex justify-between'>
+                                                <p className="mb-2 text-xl font-bold leading-none sm:text-2xl">
+                                                    {courseName}
+                                                </p>
+                                                <span className='text-xl text-red-500 italic font-extrabold leading-none sm:text-2xl'>{category}</span>
+                                            </div>
+                                            <p className="text-gray-700">
+                                                {
+                                                    details.length > 80 ?
+                                                        <>
+                                                            {details.slice(0, 80) + '...'}
+                                                        </>
+                                                        : details
+                                                }
                                             </p>
-                                            <span className='text-xl text-red-500 italic font-extrabold leading-none sm:text-2xl'>{category}</span>
                                         </div>
-                                        <p className="text-gray-700">
-                                            {
-                                                details.length > 100?
-                                                <>
-                                                    {details.slice(0, 100) + '...'}
-                                                </>
-                                                : details
-                                            }
-                                        </p>
                                     </div>
-                                </div>
+                                </Link>
 
                             )
                         })
